@@ -20,17 +20,6 @@ Initial profiling was performed using **React DevTools Profiler**.
     </thead>
     <tbody>
         <tr>
-            <td colspan="2" align="center"><h3>First render</h3></td>
-        </tr>
-        <tr>
-            <td>
-                <img src="docs/before/init-app.png" alt="">
-            </td>
-            <td>
-                <img src="docs/after/init-app.png" alt="">
-            </td>
-        </tr>
-        <tr>
             <td colspan="2" align="center"><h3>Filter by country</h3></td>
         </tr>
         <tr>

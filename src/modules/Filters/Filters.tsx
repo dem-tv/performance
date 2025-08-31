@@ -1,6 +1,6 @@
 import { Input } from '../../components/Input.tsx';
 import { Button } from '../../components/Button.tsx';
-import type { FormEvent } from 'react';
+import { type FormEvent, memo } from 'react';
 import type { FilterModel } from './Filters.types.ts';
 import { Radio } from '../../components/Radio.tsx';
 
@@ -11,7 +11,7 @@ type Props = {
 
 const years: number[] = new Array(274).fill(0).map((_, i) => i + 1750);
 
-export function Filters(props: Props) {
+function FiltersComp(props: Props) {
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget as HTMLFormElement);
@@ -93,3 +93,5 @@ export function Filters(props: Props) {
     </form>
   );
 }
+
+export const Filters = memo(FiltersComp);

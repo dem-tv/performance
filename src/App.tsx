@@ -29,6 +29,9 @@ export default function App() {
     sortDirection: 'none',
   });
 
+  const closeModal = useCallback(() => setShowModal(false), []);
+  const openModal = useCallback(() => setShowModal(true), []);
+
   const onSubmitSelectedColumns = useCallback((selected: string[]) => {
     setShowModal(false);
     setSelectedColumns(selected);
@@ -84,23 +87,28 @@ export default function App() {
     });
   }, [tableRowsFiltered, searchParams.columnSort, searchParams.sortDirection]);
 
+  const addButton = useMemo(
+    () => (
+      <Button onClick={openModal}>
+        <Icon name={'close'} rotate={'45'} />
+      </Button>
+    ),
+    []
+  );
+
   return (
     <div className={'flex flex-col gap-6 m-4'}>
       <Filters defaultFilters={searchParams} onSubmmit={onSubmitFilters} />
       <Table
         trackBy={'country'}
-        addColumn={
-          <Button onClick={() => setShowModal(true)}>
-            <Icon name={'close'} rotate={'45'} />
-          </Button>
-        }
+        addColumn={addButton}
         columns={columns}
         rows={tableRowsFilteredSorted}
       />
       <Co2Modal
         requiredColumns={requiredColumns}
         onSubmit={onSubmitSelectedColumns}
-        close={() => setShowModal(false)}
+        close={closeModal}
         show={showModal}
       />
     </div>
