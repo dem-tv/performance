@@ -1,7 +1,7 @@
 import { Modal } from '../../components/Modal.tsx';
 import { Button } from '../../components/Button.tsx';
 import { Checkbox } from '../../components/Checkbox.tsx';
-import { type FormEvent, useCallback, useState } from 'react';
+import { type FormEvent, useState } from 'react';
 
 type Props = {
   show: boolean;
@@ -83,7 +83,7 @@ export const Co2Modal = (props: Props) => {
     ...props.requiredColumns,
   ]);
 
-  const onSelectItem = useCallback((name: string) => {
+  const onSelectItem = (name: string) => {
     if (checkedColumns.includes(name)) {
       setCheckedColumns((prevState) =>
         prevState.filter((selectedName) => selectedName !== name)
@@ -92,7 +92,7 @@ export const Co2Modal = (props: Props) => {
     }
 
     setCheckedColumns((prevState) => [...prevState, name]);
-  }, []);
+  };
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();

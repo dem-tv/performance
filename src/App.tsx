@@ -1,10 +1,9 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Button } from './components/Button.tsx';
 import data from './api/owid-co2-data.json';
 import { Co2Modal } from './modules/Co2/Co2Modal.tsx';
 import { Filters } from './modules/Filters/Filters.tsx';
 import type { FilterModel } from './modules/Filters/Filters.types.ts';
-import type { TableColumn } from './types.ts';
 import { Table } from './components/Table.tsx';
 import { Icon } from './components/Icon.tsx';
 import type { CO2Item } from './api/owid-co2-data.types';
@@ -29,60 +28,49 @@ export default function App() {
     sortDirection: 'none',
   });
 
-  const onSubmitSelectedColumns = useCallback((selected: string[]) => {
+  const onSubmitSelectedColumns = (selected: string[]) => {
     setShowModal(false);
     setSelectedColumns(selected);
-  }, []);
+  };
 
-  const onSubmitFilters = useCallback((params: FilterModel) => {
+  const onSubmitFilters = (params: FilterModel) => {
     setSearchParams(params);
-  }, []);
+  };
 
-  const columns = useMemo<TableColumn[]>(() => {
-    return selectedColumns.map((name) => ({
-      field: name,
-      title: name,
-    }));
-  }, [selectedColumns]);
+  const columns = selectedColumns.map((name) => ({
+    field: name,
+    title: name,
+  }));
 
-  const dataList: [string, CO2Item][] = useMemo(() => Object.entries(data), []);
+  const dataList: [string, CO2Item][] = Object.entries(data);
 
-  const tableRows = useMemo(() => {
-    const searchYear = Number(searchParams.year);
+  const searchYear = Number(searchParams.year);
+  const tableRows = dataList
+    .map(([countryName, d]) => ({
+      country: countryName,
+      iso_code: d.iso_code,
+      ...d.data.find((item) => item.year === searchYear),
+    }))
+    .filter((item) => item.year);
 
-    return dataList
-      .map(([countryName, d]) => ({
-        country: countryName,
-        iso_code: d.iso_code,
-        ...d.data.find((item) => item.year === searchYear),
-      }))
-      .filter((item) => item.year);
-  }, [dataList, searchParams.year]);
+  const searchCountry = searchParams.country.toLowerCase();
+  const tableRowsFiltered = tableRows.filter((row) => {
+    const rowCountry = row.country.toLowerCase();
 
-  const tableRowsFiltered = useMemo(() => {
-    const searchCountry = searchParams.country.toLowerCase();
-    return tableRows.filter((row) => {
-      const rowCountry = row.country.toLowerCase();
+    return rowCountry.includes(searchCountry);
+  });
 
-      return rowCountry.includes(searchCountry);
-    });
-  }, [tableRows, searchParams.country]);
+  const { sortDirection, columnSort } = searchParams;
+  const tableRowsFilteredSorted =
+    sortDirection === 'none'
+      ? tableRowsFiltered
+      : tableRowsFiltered.toSorted((a, b) => {
+          if ((a[columnSort as never] || '') < (b[columnSort as never] || '')) {
+            return sortDirection === 'desc' ? 1 : -1;
+          }
 
-  const tableRowsFilteredSorted = useMemo(() => {
-    const { sortDirection, columnSort } = searchParams;
-
-    if (sortDirection === 'none') {
-      return tableRowsFiltered;
-    }
-
-    return tableRowsFiltered.toSorted((a, b) => {
-      if ((a[columnSort as never] || '') < (b[columnSort as never] || '')) {
-        return sortDirection === 'desc' ? 1 : -1;
-      }
-
-      return sortDirection === 'desc' ? -1 : 1;
-    });
-  }, [tableRowsFiltered, searchParams.columnSort, searchParams.sortDirection]);
+          return sortDirection === 'desc' ? -1 : 1;
+        });
 
   return (
     <div className={'flex flex-col gap-6 m-4'}>

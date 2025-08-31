@@ -1,5 +1,5 @@
 import type { TableColumn, TableRow } from '../types.ts';
-import { memo, type ReactNode, useMemo } from 'react';
+import { memo, type ReactNode } from 'react';
 
 type Props = {
   columns: TableColumn[];
@@ -15,21 +15,17 @@ const TableComp = (props: Props) => {
     </th>
   ));
 
-  const rows = useMemo(
-    () =>
-      props.rows.map((row) => {
-        return (
-          <tr className={'border'} key={row[props.trackBy]}>
-            {props.columns.map((column) => (
-              <td className={'p-2 border'} key={column.field}>
-                {row[column.field] || 'N/A'}
-              </td>
-            ))}
-          </tr>
-        );
-      }),
-    [props.rows, props.columns, props.trackBy]
-  );
+  const rows = props.rows.map((row) => {
+    return (
+      <tr className={'border'} key={row[props.trackBy]}>
+        {props.columns.map((column) => (
+          <td className={'p-2 border'} key={column.field}>
+            {row[column.field] || 'N/A'}
+          </td>
+        ))}
+      </tr>
+    );
+  });
 
   return (
     <table>
@@ -46,4 +42,4 @@ const TableComp = (props: Props) => {
   );
 };
 
-export const Table = memo(TableComp);
+export const Table = TableComp;
