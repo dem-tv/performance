@@ -1,7 +1,4 @@
 # Profiler
-
-Climate Data Viewer
-
 ## Performance Profiling
 
 Initial profiling was performed using **React DevTools Profiler**.
