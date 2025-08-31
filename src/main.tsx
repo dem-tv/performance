@@ -1,6 +1,7 @@
-import React, { StrictMode, Suspense } from 'react';
+import React, { Profiler, StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
+import { profiler } from './utils/profiler.ts';
 // import { setupStore } from './store';
 // import { Provider } from 'react-redux';
 const App = React.lazy(() => import('./App.tsx'));
@@ -19,7 +20,9 @@ function initApp() {
       {/*<Provider store={store}>*/}
 
       <Suspense fallback={'loading'}>
-        <App />
+        <Profiler id={'app'} onRender={profiler}>
+          <App />
+        </Profiler>
       </Suspense>
       {/*</Provider>*/}
     </StrictMode>
