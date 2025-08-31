@@ -15,7 +15,7 @@ export function VerticalList<ListItem>(props: Props<ListItem>) {
         </li>
       );
     },
-    [props.list, props.renderItem]
+    [props.list, props.renderItem, props.itemKey]
   );
 
   if (!props.list.length) {

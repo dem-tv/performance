@@ -3,10 +3,18 @@ import type { InputHTMLAttributes } from 'react';
 type Props = {
   label: string;
   name: string;
+  id?: string;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>;
 
-export const Checkbox = (props: Props) => {
-  const { label, name, disabled, defaultChecked, ...restProps } = props;
+export const Radio = (props: Props) => {
+  const {
+    label,
+    name,
+    id = name,
+    disabled,
+    defaultChecked,
+    ...restProps
+  } = props;
 
   return (
     <div className={'flex gap-2 items-center'}>
@@ -15,10 +23,10 @@ export const Checkbox = (props: Props) => {
         defaultChecked={defaultChecked}
         disabled={disabled}
         name={name}
-        id={name}
-        type="checkbox"
+        id={id}
+        type="radio"
       />
-      <label htmlFor={name}>{label}</label>
+      <label htmlFor={id}>{label}</label>
     </div>
   );
 };

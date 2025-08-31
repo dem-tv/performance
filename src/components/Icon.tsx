@@ -5,7 +5,7 @@ import clsx from 'clsx';
 
 type Props = SVGProps<SVGSVGElement> & {
   name: IconName;
-  rotate?: '180';
+  rotate?: '180' | '45';
 };
 
 export function Icon(props: Props) {
@@ -13,6 +13,7 @@ export function Icon(props: Props) {
 
   const cn = clsx({
     'rotate-180': rotate === '180',
+    'rotate-45': rotate === '45',
     className,
   });
 

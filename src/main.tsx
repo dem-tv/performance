@@ -1,12 +1,12 @@
-import { StrictMode } from 'react';
+import React, { StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import { setupStore } from './store';
-import { Provider } from 'react-redux';
-import { App } from './App.tsx';
+// import { setupStore } from './store';
+// import { Provider } from 'react-redux';
+const App = React.lazy(() => import('./App.tsx'));
 
 function initApp() {
-  const store = setupStore();
+  // const store = setupStore();
 
   const root = document.getElementById('root');
 
@@ -16,9 +16,12 @@ function initApp() {
 
   createRoot(root).render(
     <StrictMode>
-      <Provider store={store}>
+      {/*<Provider store={store}>*/}
+
+      <Suspense fallback={'loading'}>
         <App />
-      </Provider>
+      </Suspense>
+      {/*</Provider>*/}
     </StrictMode>
   );
 }
